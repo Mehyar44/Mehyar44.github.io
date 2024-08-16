@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background: #010619;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      position: relative;
+    }
+    .stars-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .stars-container img {
+      height: 45px;
+      width: auto;
+      display: none;
+      transition: transform 0.3s;
+    }
+    .blinking {
+      animation: blink 1s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .container1 { top: 10px; gap: 7px; }
+    .container2 { top: 70px; gap: 7px; transform: rotate(1deg) translate(-50%, -10%); }
+    .container3 { top: 130px; gap: 7px; transform: rotate(2deg) translate(-51%, -20%); }
+    .container4 { top: 190px; gap: 7px; transform: rotate(3deg) translate(-51%, -30%); }
+  </style>
+</head>
+<body>
+  <div class="stars-container container1"></div>
+  <div class="stars-container container2"></div>
+  <div class="stars-container container3"></div>
+  <div class="stars-container container4"></div>
+  <script>
+    const starSources = [
+      "https://tinyurl.com/code-star-1", "https://tinyurl.com/code-star-2", 
+      "https://tinyurl.com/code-star-3", "https://tinyurl.com/code-star-4", 
+      "https://tinyurl.com/code-star-5", "https://tinyurl.com/code-star-6", 
+      "https://tinyurl.com/code-star-7", "https://tinyurl.com/code-star-8", 
+      "https://tinyurl.com/code-star-9", "https://tinyurl.com/code-star-10", 
+      "https://tinyurl.com/code-star-11"
+    ];
+
+    function createStars(container) {
+      starSources.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `Star ${src.split('-').pop()}`;
+        container.appendChild(img);
+      });
+    }
+
+    function getRandomStars(container) {
+      return Array.from(container.querySelectorAll('img'))
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 4);
+    }
+
+    function displayStars(container) {
+      const stars = getRandomStars(container);
+      container.querySelectorAll('img').forEach(img => img.style.display = 'none');
+      stars.forEach(img => {
+        img.style.display = 'inline';
+        img.style.transform = `rotate(${Math.random() * 360}deg)`;
+        img.classList.add('blinking');
+      });
+      blinkStars(container);
+    }
+
+    function blinkStars(container) {
+      const stars = Array.from(container.querySelectorAll('img')).filter(img => img.style.display === 'inline');
+      if (stars.length === 0) return;
+
+      function blink() {
+        const visibleStars = stars.filter(img => img.style.display === 'inline');
+        if (visibleStars.length === 0) return;
+
+        visibleStars.forEach(img => img.classList.remove('blinking'));
+        const star = visibleStars[Math.floor(Math.random() * visibleStars.length)];
+        star.classList.add('blinking');
+
+        setTimeout(() => {
+          star.classList.remove('blinking');
+          setTimeout(blink, Math.random() * 9000 + 1000);
+        }, 1000);
+      }
+
+      blink();
+    }
+
+    document.querySelectorAll('.stars-container').forEach(container => {
+      createStars(container);
+      displayStars(container);
+    });
+  </script>
+</body>
+</html>
