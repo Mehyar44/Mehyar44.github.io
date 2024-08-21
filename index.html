@@ -8,35 +8,49 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(1, 6, 25, 1);
+      background: #010619;
       height: 100vh;
       overflow: hidden;
     }
     .container {
       position: relative;
       text-align: center;
+      transition: transform 0.5s, opacity 0.3s;
+      transform-origin: 51.5% 48.5%;
     }
     .container img {
       max-width: 60%;
       max-height: 60%;
+      transition: opacity 0.3s;
     }
+    .fade-out { opacity: 0; }
     .container a {
       position: absolute;
-      top: 48.7%;
-      left: 51.3%;
-      transform: translate(-50%, -50%);
-      color: white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-20%, -80%);
+      color: #fff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       font-size: 24px;
       text-decoration: none;
-      z-index: 1;
+      cursor: pointer;
+      transition: opacity 0.3s;
     }
+    .zoom { transform: scale(30); opacity: 0; }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://cdn.discordapp.com/attachments/1273417086944804865/1273417843031150674/galaxy.jfif?ex=66be8a48&is=66bd38c8&hm=e62c68967128bd72dcb241cdcc787b1356dbe5b6538cebdbe2591fdecdd1abc8&" alt="Galaxy Image">
-    <a href="javaLevels.html">Java</a>
+    <img id="galaxyImage" src="https://tinyurl.com/code-galaxy" alt="Java Galaxy">
+    <a id="zoomLink" href="javaLevels.html">Java</a>
   </div>
+  <script>
+    document.getElementById('zoomLink').addEventListener('click', event => {
+      event.preventDefault();
+      document.querySelector('.container').classList.add('zoom');
+      document.querySelectorAll('.container img, .container a').forEach(el => el.classList.add('fade-out'));
+      setTimeout(() => location.href = event.target.href, 800);
+    });
+  </script>
 </body>
 </html>
