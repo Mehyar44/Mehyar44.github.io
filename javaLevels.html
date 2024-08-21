@@ -22,6 +22,8 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 2s;
     }
     .stars-container img {
       height: 45px;
@@ -36,17 +38,12 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
-    .container1 { top: 10px; gap: 7px; }
-    .container2 { top: 70px; gap: 7px; transform: rotate(1deg) translate(-50%, -10%); }
-    .container3 { top: 130px; gap: 7px; transform: rotate(2deg) translate(-51%, -20%); }
-    .container4 { top: 190px; gap: 7px; transform: rotate(3deg) translate(-51%, -30%); }
+    .container {
+      gap: 7px;
+    }
   </style>
 </head>
 <body>
-  <div class="stars-container container1"></div>
-  <div class="stars-container container2"></div>
-  <div class="stars-container container3"></div>
-  <div class="stars-container container4"></div>
   <script>
     const starSources = [
       "https://tinyurl.com/code-star-1", "https://tinyurl.com/code-star-2", 
@@ -74,11 +71,9 @@
 
     function displayStars(container) {
       const stars = getRandomStars(container);
-      container.querySelectorAll('img').forEach(img => img.style.display = 'none');
       stars.forEach(img => {
         img.style.display = 'inline';
         img.style.transform = `rotate(${Math.random() * 360}deg)`;
-        img.classList.add('blinking');
       });
       blinkStars(container);
     }
@@ -101,12 +96,27 @@
         }, 1000);
       }
 
-      blink();
+      const delay = Math.random() * 9000 + 1000; // 1-10 seconds delay
+      setTimeout(blink, delay);
     }
 
-    document.querySelectorAll('.stars-container').forEach(container => {
+    function createContainer(index) {
+      const container = document.createElement('div');
+      container.className = 'stars-container container';
+      container.style.top = `${index * 50 + 10}px`;
       createStars(container);
+      document.body.appendChild(container);
       displayStars(container);
+    }
+
+    for (let i = 0; i < 15; i++) {
+      createContainer(i);
+    }
+
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.stars-container').forEach(container => {
+        container.style.opacity = '1';
+      });
     });
   </script>
 </body>
